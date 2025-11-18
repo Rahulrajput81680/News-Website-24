@@ -40,7 +40,7 @@ export default function SearchPage() {
             <h1 className="text-4xl font-bold font-serif hover:text-white transition-colors">Search Results</h1>
           </div>
           <p className="text-lg opacity-90">
-            Found {results.length} result{results.length !== 1 ? 's' : ''} for "{query}"
+            Found {results.length} result{results.length !== 1 ? 's' : ''} for &quot;{query}&quot;
           </p>
         </div>
       </div>
