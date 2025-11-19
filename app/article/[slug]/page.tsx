@@ -13,6 +13,13 @@ interface ArticlePageProps {
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+  // Skip during build if MongoDB not configured
+  if (!process.env.MONGODB_URI) {
+    return {
+      title: "Article - Trendhandy",
+    };
+  }
+  
   const { slug } = await params;
   
   try {

@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Skip static page generation during build if DB not available
+  // Use standalone output for Vercel
   output: "standalone",
+
+  // Skip prerendering pages that need database
+  skipTrailingSlashRedirect: true,
 
   images: {
     remotePatterns: [
@@ -10,11 +13,6 @@ const nextConfig = {
         hostname: "**",
       },
     ],
-  },
-
-  // Disable static generation for dynamic routes during build
-  experimental: {
-    // This prevents build errors when MongoDB is not available
   },
 
   async headers() {

@@ -7,20 +7,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ? `https://${process.env.VERCEL_URL}` 
     : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003'
   
-  // Fetch articles from MongoDB
+  // Fetch articles from MongoDB - skip if no MongoDB URI (during build)
   let articles: Article[] = [];
-  try {
-    const apiUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}/api/articles`
-      : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003'}/api/articles`;
-    
-    const response = await fetch(apiUrl, {
-      cache: 'no-store'
-    });
-    const result = await response.json();
-    articles = result.data || [];
-  } catch (error) {
-    console.error('Error fetching articles for sitemap:', error);
+  
+  if (process.env.MONGODB_URI) {
+    try {
+      const apiUrl = process.env.VERCEL_URL 
+        ? `https://${process.env.VERCEL_URL}/api/articles`
+        : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003'}/api/articles`;
+      
+      const response = await fetch(apiUrl, {
+        cache: 'no-store'
+      });
+      const result = await response.json();
+      articles = result.data || [];
+    } catch (error) {
+      console.error('Error fetching articles for sitemap:', error);
+    }
   }
   // Static pages
   const staticPages = [

@@ -6,16 +6,21 @@ import { fetchArticles } from "@/lib/api";
 import type { Article } from "@/lib/types";
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function HomePage() {
-  // Fetch articles from API with error handling for build time
+  // Skip data fetching during build if MongoDB is not available
+  // Check if we're in a build context by looking for MONGODB_URI
+  const isBuildTime = !process.env.MONGODB_URI;
+  
   let articles: Article[] = [];
-  try {
-    articles = await fetchArticles();
-  } catch (error) {
-    console.log('⚠️ Could not fetch articles:', error instanceof Error ? error.message : 'Unknown error');
-    // Return empty page during build, will work at runtime when MongoDB is configured
-    articles = [];
+  
+  if (!isBuildTime) {
+    try {
+      articles = await fetchArticles();
+    } catch (error) {
+      console.log('⚠️ Could not fetch articles:', error instanceof Error ? error.message : 'Unknown error');
+    }
   }
 
   const featuredArticles = articles.filter(a => a.featured || a.trending).slice(0, 4);
