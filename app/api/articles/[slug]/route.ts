@@ -8,12 +8,13 @@ export const revalidate = 0;
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     await connectDB();
-
-    const article = await Article.findOne({ slug: params.slug }).lean();
+    
+    const { slug } = await params;
+    const article = await Article.findOne({ slug }).lean();
 
     if (!article) {
       return NextResponse.json(
@@ -37,15 +38,16 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     await connectDB();
 
     const body = await request.json();
+    const { slug } = await params;
 
     const article = await Article.findOneAndUpdate(
-      { slug: params.slug },
+      { slug },
       body,
       { new: true, runValidators: true }
     ).lean();
@@ -73,12 +75,14 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     await connectDB();
+    
+    const { slug } = await params;
 
-    const article = await Article.findOneAndDelete({ slug: params.slug }).lean();
+    const article = await Article.findOneAndDelete({ slug }).lean();
 
     if (!article) {
       return NextResponse.json(
