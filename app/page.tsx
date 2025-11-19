@@ -3,12 +3,20 @@ import LatestNews from "@/components/LatestNews";
 import TrendingNews from "@/components/TrendingNews";
 import CategorySection from "@/components/CategorySection";
 import { fetchArticles } from "@/lib/api";
+import type { Article } from "@/lib/types";
 
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  // Fetch articles from API
-  let articles = await fetchArticles();
+  // Fetch articles from API with error handling for build time
+  let articles: Article[] = [];
+  try {
+    articles = await fetchArticles();
+  } catch (error) {
+    console.log('⚠️ Could not fetch articles:', error instanceof Error ? error.message : 'Unknown error');
+    // Return empty page during build, will work at runtime when MongoDB is configured
+    articles = [];
+  }
 
   const featuredArticles = articles.filter(a => a.featured || a.trending).slice(0, 4);
   const latestArticles = articles.slice(0, 8);

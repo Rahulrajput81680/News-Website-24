@@ -2,16 +2,9 @@ import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
-if (!MONGODB_URI) {
-  // During build time, this is acceptable - MongoDB will be configured in Vercel
-  if (process.env.NODE_ENV === 'production' && !process.env.VERCEL) {
-    console.error('⚠️  MONGODB_URI is not defined in environment variables');
-    throw new Error(
-      'Please define the MONGODB_URI environment variable inside .env.local or in Vercel dashboard'
-    );
-  } else {
-    console.warn('⚠️  MONGODB_URI not set - build will continue but runtime will fail without it');
-  }
+// Don't throw error during build time - only warn
+if (!MONGODB_URI && process.env.NODE_ENV !== 'production') {
+  console.warn('⚠️  MONGODB_URI not set - API routes will fail at runtime');
 }
 
 interface MongooseCache {
@@ -30,9 +23,13 @@ if (!cached) {
 }
 
 async function connectDB() {
-  // Skip connection if no URI provided (during build)
+  // Throw error at runtime if no URI (not during build/import)
   if (!MONGODB_URI) {
-    throw new Error('MONGODB_URI is not configured');
+    const error = new Error(
+      'MONGODB_URI is not defined. Please add it to your Vercel environment variables or .env.local file'
+    );
+    console.error('❌', error.message);
+    throw error;
   }
   
   if (cached.conn) {

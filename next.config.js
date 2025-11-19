@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Skip static page generation during build if DB not available
-  output: 'standalone',
-  
+  output: "standalone",
+
   images: {
     remotePatterns: [
       {
@@ -11,12 +11,12 @@ const nextConfig = {
       },
     ],
   },
-  
+
   // Disable static generation for dynamic routes during build
   experimental: {
     // This prevents build errors when MongoDB is not available
   },
-  
+
   async headers() {
     return [
       {
