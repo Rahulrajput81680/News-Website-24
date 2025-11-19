@@ -1,7 +1,12 @@
 // API Service for fetching articles from backend
 const getBaseUrl = () => {
-  // Server-side: use localhost
+  // Server-side: use Vercel URL or localhost
   if (typeof window === 'undefined') {
+    // In production (Vercel), use the deployment URL
+    if (process.env.VERCEL_URL) {
+      return `https://${process.env.VERCEL_URL}`;
+    }
+    // Fallback to custom domain or localhost
     return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003';
   }
   // Client-side: use relative path

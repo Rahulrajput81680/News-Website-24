@@ -2,12 +2,19 @@ import { MetadataRoute } from 'next'
 import type { Article } from '@/lib/types'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://thehindu.com'
+  // Use Vercel URL in production, fallback for local dev
+  const baseUrl = process.env.VERCEL_URL 
+    ? `https://${process.env.VERCEL_URL}` 
+    : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003'
   
   // Fetch articles from MongoDB
   let articles: Article[] = [];
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/articles`, {
+    const apiUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}/api/articles`
+      : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003'}/api/articles`;
+    
+    const response = await fetch(apiUrl, {
       cache: 'no-store'
     });
     const result = await response.json();
