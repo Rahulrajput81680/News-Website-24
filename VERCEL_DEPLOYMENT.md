@@ -9,12 +9,14 @@ Your app is not fetching data because **MongoDB is not configured on Vercel**.
 1. **Go to MongoDB Atlas**: https://www.mongodb.com/cloud/atlas/register
 2. **Create a FREE account** (no credit card required)
 3. **Create a cluster**:
+
    - Choose AWS
    - Select region closest to you
    - Select M0 (FREE tier)
    - Click "Create Cluster"
 
 4. **Create Database User**:
+
    - Go to "Database Access"
    - Click "Add New Database User"
    - Choose "Password" authentication
@@ -24,22 +26,27 @@ Your app is not fetching data because **MongoDB is not configured on Vercel**.
    - Click "Add User"
 
 5. **Whitelist IP Address**:
+
    - Go to "Network Access"
    - Click "Add IP Address"
    - Select "Allow Access from Anywhere" (0.0.0.0/0)
    - Click "Confirm"
 
 6. **Get Connection String**:
+
    - Go to "Database" → "Connect"
    - Choose "Connect your application"
    - Copy the connection string (looks like this):
+
    ```
    mongodb+srv://trendhandy:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
    ```
+
    - Replace `<password>` with your actual password
    - Add database name at the end: `/trendhandy`
-   
+
    **Final format:**
+
    ```
    mongodb+srv://trendhandy:YourPassword123@cluster0.xxxxx.mongodb.net/trendhandy?retryWrites=true&w=majority
    ```
@@ -47,10 +54,12 @@ Your app is not fetching data because **MongoDB is not configured on Vercel**.
 ### Step 2: Add to Vercel Environment Variables
 
 1. **Go to your Vercel project**:
+
    - Visit: https://vercel.com/dashboard
    - Select your `News-Website-24` project
 
 2. **Add Environment Variable**:
+
    - Go to "Settings" → "Environment Variables"
    - Click "Add New"
    - **Name**: `MONGODB_URI`
@@ -69,6 +78,7 @@ Your app is not fetching data because **MongoDB is not configured on Vercel**.
 After successful deployment:
 
 1. **Login to Admin**: `https://your-site.vercel.app/admin/login`
+
    - Email: `rahulrajput81680@gmail.com`
    - Password: `Rahul@00`
 
@@ -83,6 +93,7 @@ After successful deployment:
 ### Problem: "Failed to connect to MongoDB"
 
 **Solution**:
+
 1. Check MONGODB_URI is added in Vercel
 2. Verify connection string format is correct
 3. Ensure password doesn't contain special characters (use alphanumeric)
@@ -91,6 +102,7 @@ After successful deployment:
 ### Problem: "No articles showing on homepage"
 
 **Solution**:
+
 1. Database is empty - add articles via admin panel
 2. Check Vercel deployment logs for errors
 3. Verify MONGODB_URI environment variable is set
@@ -98,6 +110,7 @@ After successful deployment:
 ### Problem: "Internal Server Error 500"
 
 **Solution**:
+
 1. Check Vercel Function Logs:
    - Go to Vercel Dashboard → Deployments → Click deployment → Functions tab
 2. Look for MongoDB connection errors
@@ -123,6 +136,7 @@ After deployment and MongoDB setup:
 3. Vercel will auto-deploy
 
 ### Recommended Changes:
+
 - Use environment variables for admin credentials
 - Set up proper authentication (NextAuth.js)
 - Enable 2FA on MongoDB Atlas
@@ -132,9 +146,9 @@ After deployment and MongoDB setup:
 
 Add these to Vercel:
 
-| Variable | Required | Example |
-|----------|----------|---------|
-| `MONGODB_URI` | ✅ Yes | `mongodb+srv://user:pass@cluster.mongodb.net/trendhandy` |
+| Variable      | Required | Example                                                  |
+| ------------- | -------- | -------------------------------------------------------- |
+| `MONGODB_URI` | ✅ Yes   | `mongodb+srv://user:pass@cluster.mongodb.net/trendhandy` |
 
 ## 🚀 Local Development
 
@@ -147,6 +161,7 @@ To run locally with MongoDB Atlas:
 ---
 
 **Need Help?**
+
 - MongoDB Atlas Docs: https://docs.atlas.mongodb.com/
 - Vercel Docs: https://vercel.com/docs
 - Next.js Docs: https://nextjs.org/docs
