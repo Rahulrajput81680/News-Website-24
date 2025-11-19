@@ -1,10 +1,11 @@
 import { MetadataRoute } from 'next'
+import type { Article } from '@/lib/types'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://thehindu.com'
   
   // Fetch articles from MongoDB
-  let articles = [];
+  let articles: Article[] = [];
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/articles`, {
       cache: 'no-store'
@@ -65,7 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // Article pages
-  const articlePages = articles.map(article => ({
+  const articlePages = articles.map((article: Article) => ({
     url: `${baseUrl}/article/${article.slug}`,
     lastModified: new Date(article.publishedAt),
     changeFrequency: 'weekly' as const,
